@@ -1,0 +1,22 @@
+[
+  {
+    "id": "1",
+    "name": "Baking Techniques",
+    "description": "Discuss bread making, pastries, and all things baking related."
+  },
+  {
+    "id": "2",
+    "name": "International Cuisine",
+    "description": "Share recipes and tips from cuisines around the world."
+  },
+  {
+    "id": "3",
+    "name": "Kitchen Equipment",
+    "description": "Reviews and recommendations for kitchen tools and appliances."
+  },
+  {
+    "id": "4",
+    "name": "Healthy Cooking",
+    "description": "Nutritious recipes and tips for maintaining a healthy diet."
+  }
+]

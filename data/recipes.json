@@ -1,0 +1,76 @@
+[
+  {
+    "id": "1",
+    "title": "Classic Spaghetti Carbonara",
+    "category": "Italian",
+    "authorId": "2",
+    "imageUrl": "/placeholder.svg?height=400&width=600",
+    "ingredients": [
+      "400g spaghetti",
+      "200g guanciale or pancetta",
+      "4 large eggs",
+      "100g Pecorino Romano cheese",
+      "Black pepper",
+      "Salt"
+    ],
+    "steps": "1. Cook pasta in salted boiling water. 2. Fry guanciale until crispy. 3. Mix eggs with grated cheese. 4. Combine hot pasta with guanciale, then add egg mixture off heat. 5. Toss quickly and serve with extra cheese and black pepper.",
+    "likeCount": 42,
+    "createdAt": "2024-03-15T12:00:00Z"
+  },
+  {
+    "id": "2",
+    "title": "Homemade Margherita Pizza",
+    "category": "Italian",
+    "authorId": "2",
+    "imageUrl": "/placeholder.svg?height=400&width=600",
+    "ingredients": [
+      "Pizza dough",
+      "San Marzano tomatoes",
+      "Fresh mozzarella",
+      "Fresh basil",
+      "Extra virgin olive oil",
+      "Salt"
+    ],
+    "steps": "1. Preheat oven to maximum temperature. 2. Roll out dough into circle. 3. Spread crushed tomatoes, add mozzarella pieces. 4. Bake 8-10 minutes until crust is golden. 5. Top with fresh basil and olive oil.",
+    "likeCount": 67,
+    "createdAt": "2024-03-18T15:30:00Z"
+  },
+  {
+    "id": "3",
+    "title": "Thai Green Curry",
+    "category": "Asian",
+    "authorId": "3",
+    "imageUrl": "/placeholder.svg?height=400&width=600",
+    "ingredients": [
+      "2 tbsp green curry paste",
+      "400ml coconut milk",
+      "300g chicken breast",
+      "Thai eggplant",
+      "Bamboo shoots",
+      "Thai basil",
+      "Fish sauce",
+      "Palm sugar"
+    ],
+    "steps": "1. Fry curry paste in oil until fragrant. 2. Add coconut milk and bring to simmer. 3. Add chicken and vegetables, cook 15 minutes. 4. Season with fish sauce and sugar. 5. Garnish with Thai basil.",
+    "likeCount": 53,
+    "createdAt": "2024-03-20T11:45:00Z"
+  },
+  {
+    "id": "4",
+    "title": "Chocolate Lava Cake",
+    "category": "Dessert",
+    "authorId": "2",
+    "imageUrl": "/placeholder.svg?height=400&width=600",
+    "ingredients": [
+      "100g dark chocolate",
+      "100g butter",
+      "2 eggs",
+      "2 egg yolks",
+      "50g sugar",
+      "30g flour"
+    ],
+    "steps": "1. Melt chocolate and butter together. 2. Whisk eggs, yolks, and sugar until thick. 3. Fold in chocolate mixture and flour. 4. Pour into buttered ramekins. 5. Bake at 200°C for 12 minutes.",
+    "likeCount": 89,
+    "createdAt": "2024-03-22T16:20:00Z"
+  }
+]

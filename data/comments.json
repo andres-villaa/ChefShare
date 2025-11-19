@@ -1,0 +1,42 @@
+[
+  {
+    "id": "1",
+    "recipeId": "1",
+    "threadId": null,
+    "userId": "3",
+    "content": "This carbonara recipe is absolutely perfect! The technique of mixing eggs off heat is crucial.",
+    "createdAt": "2024-03-16T10:30:00Z"
+  },
+  {
+    "id": "2",
+    "recipeId": "1",
+    "threadId": null,
+    "userId": "2",
+    "content": "Thank you! Glad you enjoyed it. The key is using good quality guanciale.",
+    "createdAt": "2024-03-16T14:15:00Z"
+  },
+  {
+    "id": "3",
+    "recipeId": "2",
+    "threadId": null,
+    "userId": "3",
+    "content": "Best pizza recipe I've tried. The crust came out crispy and perfect!",
+    "createdAt": "2024-03-19T09:45:00Z"
+  },
+  {
+    "id": "4",
+    "recipeId": null,
+    "threadId": "1",
+    "userId": "2",
+    "content": "I recommend using a pizza stone for better heat distribution. It makes a huge difference!",
+    "createdAt": "2024-03-21T13:20:00Z"
+  },
+  {
+    "id": "5",
+    "recipeId": null,
+    "threadId": "1",
+    "userId": "3",
+    "content": "Great tip! I'll try that next time. What temperature do you recommend?",
+    "createdAt": "2024-03-21T14:30:00Z"
+  }
+]

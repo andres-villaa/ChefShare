@@ -1,0 +1,26 @@
+[
+  {
+    "id": "1",
+    "forumId": "1",
+    "title": "Best practices for pizza dough fermentation?",
+    "authorId": "3",
+    "createdAt": "2024-03-21T10:00:00Z",
+    "commentCount": 2
+  },
+  {
+    "id": "2",
+    "forumId": "2",
+    "title": "Authentic Thai curry paste - where to buy?",
+    "authorId": "2",
+    "createdAt": "2024-03-22T14:30:00Z",
+    "commentCount": 0
+  },
+  {
+    "id": "3",
+    "forumId": "3",
+    "title": "Stand mixer recommendations for home bakers",
+    "authorId": "3",
+    "createdAt": "2024-03-23T09:15:00Z",
+    "commentCount": 0
+  }
+]
