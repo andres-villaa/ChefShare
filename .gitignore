@@ -1,0 +1,50 @@
+# .gitignore generado por asistente — específico para Next.js + pnpm
+# Ignora dependencias y build outputs
+node_modules/
+.next/
+out/
+dist/
+
+# pnpm stores and caches
+.pnpm-store/
+.pnpm/
+
+# Environment variables
+.env
+.env.development.local
+.env.local
+.env.*.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS files
+.DS_Store
+
+# Editor folders
+.vscode/
+.idea/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Parcel, Next cache
+.parcel-cache/
+.cache/
+
+# Storybook static
+storybook-static/
+
+# Coverage
+coverage/
+
+# Temporary files
+*.tgz
+*.log
+
+# Optional: lockfile is usually committed for reproducible installs.
+# If you prefer not to commit pnpm-lock.yaml, uncomment the next line.
+# pnpm-lock.yaml
