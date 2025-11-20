@@ -3,157 +3,208 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import RecipeCard from "@/components/RecipeCard";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Search, SlidersHorizontal } from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Badge } from "@/components/ui/badge";
+import { Search } from "lucide-react";
 
 const Recipes = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [selectedDifficulty, setSelectedDifficulty] = useState("all");
+  const [searchAuthor, setSearchAuthor] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [selectedDifficulty, setSelectedDifficulty] = useState<string>("all");
 
-  // Sample data
+  const categories = [
+    "Desayuno",
+    "Almuerzo",
+    "Cena",
+    "Postres",
+    "Vegetariano",
+    "Vegano",
+  ];
+
   const recipes = [
     {
       id: 1,
       title: "Paella Valenciana",
-      author: "María García",
-      image: "https://images.unsplash.com/photo-1534080564583-6be75777b70a",
+      author: "Chef Miguel",
       rating: 4.8,
-      likes: 245,
-      category: "Plato Principal",
+      image: "https://images.unsplash.com/photo-1534080564583-6be75777b70a?w=800&q=80",
+      time: 60,
+      difficulty: "Avanzado",
+      category: "Almuerzo",
     },
     {
       id: 2,
-      title: "Tiramisú Clásico",
-      author: "Carlos Ruiz",
-      image: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9",
-      rating: 4.9,
-      likes: 312,
-      category: "Postres",
+      title: "Ensalada Fresca de Quinoa",
+      author: "Ana Cocina",
+      rating: 4.5,
+      image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&q=80",
+      time: 20,
+      difficulty: "Fácil",
+      category: "Vegetariano",
     },
     {
       id: 3,
-      title: "Ensalada César",
-      author: "Ana López",
-      image: "https://images.unsplash.com/photo-1546793665-c74683f339c1",
-      rating: 4.6,
-      likes: 189,
-      category: "Ensaladas",
+      title: "Curry de Garbanzos y Espinacas",
+      author: "Sabores de Sofia",
+      rating: 4.7,
+      image: "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=800&q=80",
+      time: 45,
+      difficulty: "Moderado",
+      category: "Vegano",
     },
     {
       id: 4,
-      title: "Pasta Carbonara",
-      author: "Giuseppe Romano",
-      image: "https://images.unsplash.com/photo-1612874742237-6526221588e3",
-      rating: 4.7,
-      likes: 276,
-      category: "Plato Principal",
-    },
-    {
-      id: 5,
-      title: "Brownie de Chocolate",
-      author: "Laura Martínez",
-      image: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c",
+      title: "Tarta de Manzana Casera",
+      author: "Recetas de Pedro",
       rating: 4.9,
-      likes: 398,
+      image: "https://images.unsplash.com/photo-1535920527002-b35e96722eb9?w=800&q=80",
+      time: 90,
+      difficulty: "Moderado",
       category: "Postres",
     },
     {
+      id: 5,
+      title: "Smoothie Tropical Antioxidante",
+      author: "Ana Cocina",
+      rating: 4.6,
+      image: "https://images.unsplash.com/photo-1505252585461-04db1eb84625?w=800&q=80",
+      time: 10,
+      difficulty: "Fácil",
+      category: "Desayuno",
+    },
+    {
       id: 6,
-      title: "Tacos al Pastor",
-      author: "Miguel Hernández",
-      image: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47",
-      rating: 4.8,
-      likes: 421,
-      category: "Plato Principal",
+      title: "Lasaña Clásica a la Boloñesa",
+      author: "Chef Miguel",
+      rating: 4.9,
+      image: "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=800&q=80",
+      time: 120,
+      difficulty: "Avanzado",
+      category: "Cena",
+    },
+    {
+      id: 7,
+      title: "Pan Integral Casero",
+      author: "Recetas de Pedro",
+      rating: 4.7,
+      image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800&q=80",
+      time: 180,
+      difficulty: "Moderado",
+      category: "Desayuno",
+    },
+    {
+      id: 8,
+      title: "Sopa de Verduras de la Abuela",
+      author: "Recetas de Pedro",
+      rating: 4.4,
+      image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=800&q=80",
+      time: 40,
+      difficulty: "Fácil",
+      category: "Cena",
     },
   ];
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background">
       <Navbar />
-      
-      <main className="flex-1 container mx-auto px-4 py-8">
-        {/* Header */}
+
+      <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-2">
-            Explora Recetas
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
+            Descubre Nuevas Recetas
           </h1>
           <p className="text-muted-foreground">
-            Descubre miles de recetas deliciosas de nuestra comunidad
+            Explora nuestra colección de deliciosas recetas
           </p>
         </div>
 
-        {/* Search and Filters */}
-        <div className="bg-card rounded-lg border p-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="md:col-span-2">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
-                <Input
-                  placeholder="Buscar recetas..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                />
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Filters Sidebar */}
+          <aside className="lg:col-span-1 space-y-6">
+            <div className="bg-card border border-border rounded-lg p-6 space-y-6">
+              <div>
+                <h3 className="font-semibold text-lg mb-3 text-foreground">
+                  Categorías
+                </h3>
+                <RadioGroup value={selectedCategory} onValueChange={setSelectedCategory}>
+                  <div className="flex items-center space-x-2 mb-2">
+                    <RadioGroupItem value="all" id="all" />
+                    <Label htmlFor="all" className="cursor-pointer">
+                      Todas
+                    </Label>
+                  </div>
+                  {categories.map((category) => (
+                    <div key={category} className="flex items-center space-x-2 mb-2">
+                      <RadioGroupItem value={category} id={category} />
+                      <Label htmlFor={category} className="cursor-pointer">
+                        {category}
+                      </Label>
+                    </div>
+                  ))}
+                </RadioGroup>
+              </div>
+
+              <div>
+                <h3 className="font-semibold text-lg mb-3 text-foreground">
+                  Dificultad
+                </h3>
+                <RadioGroup value={selectedDifficulty} onValueChange={setSelectedDifficulty}>
+                  <div className="flex items-center space-x-2 mb-2">
+                    <RadioGroupItem value="all" id="diff-all" />
+                    <Label htmlFor="diff-all" className="cursor-pointer">
+                      Todas
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2 mb-2">
+                    <RadioGroupItem value="Fácil" id="facil" />
+                    <Label htmlFor="facil" className="cursor-pointer">
+                      Fácil
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2 mb-2">
+                    <RadioGroupItem value="Moderado" id="moderado" />
+                    <Label htmlFor="moderado" className="cursor-pointer">
+                      Moderado
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2 mb-2">
+                    <RadioGroupItem value="Avanzado" id="avanzado" />
+                    <Label htmlFor="avanzado" className="cursor-pointer">
+                      Avanzado
+                    </Label>
+                  </div>
+                </RadioGroup>
+              </div>
+
+              <div>
+                <h3 className="font-semibold text-lg mb-3 text-foreground">
+                  Autor
+                </h3>
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    type="text"
+                    placeholder="Buscar autor..."
+                    value={searchAuthor}
+                    onChange={(e) => setSearchAuthor(e.target.value)}
+                    className="pl-9"
+                  />
+                </div>
               </div>
             </div>
-            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger>
-                <SelectValue placeholder="Categoría" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todas las categorías</SelectItem>
-                <SelectItem value="appetizers">Entradas</SelectItem>
-                <SelectItem value="main">Plato Principal</SelectItem>
-                <SelectItem value="desserts">Postres</SelectItem>
-                <SelectItem value="salads">Ensaladas</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={selectedDifficulty} onValueChange={setSelectedDifficulty}>
-              <SelectTrigger>
-                <SelectValue placeholder="Dificultad" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todas</SelectItem>
-                <SelectItem value="easy">Fácil</SelectItem>
-                <SelectItem value="medium">Media</SelectItem>
-                <SelectItem value="hard">Difícil</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="flex items-center gap-2 mt-4">
-            <Button variant="outline" size="sm">
-              <SlidersHorizontal className="w-4 h-4 mr-2" />
-              Más filtros
-            </Button>
-            <Button variant="ghost" size="sm">
-              Limpiar filtros
-            </Button>
+          </aside>
+
+          {/* Recipes Grid */}
+          <div className="lg:col-span-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+              {recipes.map((recipe) => (
+                <RecipeCard key={recipe.id} {...recipe} />
+              ))}
+            </div>
           </div>
         </div>
-
-        {/* Results count */}
-        <div className="mb-6">
-          <p className="text-muted-foreground">
-            Mostrando <span className="font-semibold text-foreground">{recipes.length}</span> recetas
-          </p>
-        </div>
-
-        {/* Recipe Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {recipes.map((recipe) => (
-            <RecipeCard key={recipe.id} {...recipe} />
-          ))}
-        </div>
-      </main>
+      </div>
 
       <Footer />
     </div>
