@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import supabase from '../lib/supabaseClient';
 
 interface User {
   id: string;
@@ -10,8 +11,8 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, password: string) => Promise<boolean>;
-  register: (username: string, email: string, password: string) => Promise<boolean>;
+  login: (email: string, password: string) => Promise<{ success: boolean; message?: string }>;
+  register: (username: string, email: string, password: string) => Promise<{ success: boolean; message?: string }>;
   logout: () => void;
   isAuthenticated: boolean;
   isAdmin: boolean;
@@ -23,70 +24,78 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('kitchenlink_user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        const userData = {
+          id: session.user.id,
+          username: session.user.user_metadata?.username || '',
+          email: session.user.email,
+          role: (session.user.user_metadata?.role as 'user' | 'admin') || 'user',
+          avatar: session.user.user_metadata?.avatar,
+        } as User;
+        setUser(userData);
+      } else {
+        setUser(null);
+      }
+    });
+    return () => {
+      subscription?.unsubscribe();
+    };
   }, []);
 
-  const login = async (email: string, password: string): Promise<boolean> => {
-    // Simular autenticación
-    const users = JSON.parse(localStorage.getItem('kitchenlink_users') || '[]');
-    const foundUser = users.find((u: any) => u.email === email && u.password === password);
-    
-    if (foundUser) {
-      const { password: _, ...userWithoutPassword } = foundUser;
-      setUser(userWithoutPassword);
-      localStorage.setItem('kitchenlink_user', JSON.stringify(userWithoutPassword));
-      return true;
+  const login = async (email: string, password: string): Promise<{ success: boolean; message?: string }> => {
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      console.error('Login error:', error.message);
+      return { success: false, message: error.message };
     }
-    
-    // Usuario admin por defecto
-    if (email === 'admin@kitchenlink.com' && password === 'admin123') {
-      const adminUser: User = {
-        id: 'admin',
-        username: 'Admin',
-        email: 'admin@kitchenlink.com',
-        role: 'admin',
-        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Admin'
-      };
-      setUser(adminUser);
-      localStorage.setItem('kitchenlink_user', JSON.stringify(adminUser));
-      return true;
+    if (data.user) {
+      const userData = {
+        id: data.user.id,
+        username: data.user.user_metadata?.username || '',
+        email: data.user.email,
+        role: (data.user.user_metadata?.role as 'user' | 'admin') || 'user',
+        avatar: data.user.user_metadata?.avatar,
+      } as User;
+      setUser(userData);
+      return { success: true };
     }
-    
-    return false;
+    return { success: false, message: 'Login failed' };
   };
 
-  const register = async (username: string, email: string, password: string): Promise<boolean> => {
-    const users = JSON.parse(localStorage.getItem('kitchenlink_users') || '[]');
-    
-    // Verificar si el email ya existe
-    if (users.find((u: any) => u.email === email)) {
-      return false;
-    }
-
-    const newUser = {
-      id: Date.now().toString(),
-      username,
+  const register = async (username: string, email: string, password: string): Promise<{ success: boolean; message?: string }> => {
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      role: 'user' as const,
-      avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${username}`
-    };
-
-    users.push(newUser);
-    localStorage.setItem('kitchenlink_users', JSON.stringify(users));
-
-    const { password: _, ...userWithoutPassword } = newUser;
-    setUser(userWithoutPassword);
-    localStorage.setItem('kitchenlink_user', JSON.stringify(userWithoutPassword));
-    return true;
+      options: {
+        data: {
+          username,
+          role: 'user',
+        },
+      },
+    });
+    if (error) {
+      console.error('Registration error:', error.message);
+      return { success: false, message: error.message };
+    }
+    if (data.user) {
+      const userData = {
+        id: data.user.id,
+        username,
+        email,
+        role: 'user' as const,
+        avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${username}`,
+      } as User;
+      setUser(userData);
+      return { success: true };
+    }
+    return { success: false, message: 'Registration failed' };
   };
 
-  const logout = () => {
+  const logout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) console.error('Logout error:', error.message);
     setUser(null);
-    localStorage.removeItem('kitchenlink_user');
   };
 
   return (

@@ -20,7 +20,7 @@ const Register = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (formData.password !== formData.confirmPassword) {
       toast({
         title: "Error",
@@ -30,9 +30,9 @@ const Register = () => {
       return;
     }
 
-    const success = await register(formData.username, formData.email, formData.password);
-    
-    if (success) {
+    const result = await register(formData.username, formData.email, formData.password);
+
+    if (result.success) {
       toast({
         title: "Cuenta creada exitosamente",
         description: "Bienvenido a KitchenLink",
@@ -41,7 +41,7 @@ const Register = () => {
     } else {
       toast({
         title: "Error",
-        description: "El email ya está registrado",
+        description: result.message || "Error al registrarse",
         variant: "destructive",
       });
     }

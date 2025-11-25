@@ -18,9 +18,9 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const success = await login(formData.email, formData.password);
-    
-    if (success) {
+    const result = await login(formData.email, formData.password);
+
+    if (result.success) {
       toast({
         title: "Inicio de sesión exitoso",
         description: "Bienvenido de vuelta a KitchenLink",
@@ -29,7 +29,7 @@ const Login = () => {
     } else {
       toast({
         title: "Error",
-        description: "Email o contraseña incorrectos",
+        description: result.message || "Email o contraseña incorrectos",
         variant: "destructive",
       });
     }
@@ -55,7 +55,7 @@ const Login = () => {
                 Iniciar Sesión
               </h1>
             </div>
-            
+
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-foreground">
@@ -71,7 +71,7 @@ const Login = () => {
                   className="bg-white"
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="password" className="text-foreground">
                   Contraseña
