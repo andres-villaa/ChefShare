@@ -38,3 +38,5 @@ const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`Admin API corriendo en puerto ${PORT}`);
 });
+
+// node admin-api.js  
