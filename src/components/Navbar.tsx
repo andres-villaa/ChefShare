@@ -83,9 +83,14 @@ const Navbar = () => {
                     <Link to="/profile">Perfil</Link>
                   </DropdownMenuItem>
                   {isAdmin && (
-                    <DropdownMenuItem asChild>
-                      <Link to="/admin">Panel Admin</Link>
-                    </DropdownMenuItem>
+                    <>
+                      <DropdownMenuItem asChild>
+                        <Link to="/admin">Panel Admin</Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link to="/admin/users">Usuarios</Link>
+                      </DropdownMenuItem>
+                    </>
                   )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={logout} className="text-destructive">

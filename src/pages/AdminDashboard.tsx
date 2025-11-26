@@ -4,10 +4,38 @@ import Footer from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, BookOpen, MessageSquare, TrendingUp } from "lucide-react";
+import { Users, BookOpen, TrendingUp, AlertTriangle } from "lucide-react";
+
+import { useEffect, useState } from "react";
 
 const AdminDashboard = () => {
   const { user, isAdmin } = useAuth();
+  const [stats, setStats] = useState({
+    totalUsers: 0,
+    totalRecipes: 0,
+    totalForumTopics: 0,
+    totalVisits: 0,
+    recentRecipes: [],
+    activeUsers: [],
+    reportedComments: [],
+    contentStats: {},
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      if (!isAdmin) return;
+      try {
+        const res = await fetch("http://localhost:4000/api/admin/stats");
+        const json = await res.json();
+        setStats(json);
+      } catch (err) {
+        // Si falla, deja los valores en 0
+      }
+      setLoading(false);
+    };
+    fetchStats();
+  }, [isAdmin]);
 
   if (!user || !isAdmin) {
     return (
@@ -45,8 +73,8 @@ const AdminDashboard = () => {
               <Users className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">1,234</div>
-              <p className="text-xs text-muted-foreground">+12% desde el mes pasado</p>
+              <div className="text-2xl font-bold">{loading ? '...' : stats.totalUsers}</div>
+              <p className="text-xs text-muted-foreground">Usuarios registrados</p>
             </CardContent>
           </Card>
 
@@ -56,19 +84,19 @@ const AdminDashboard = () => {
               <BookOpen className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">456</div>
-              <p className="text-xs text-muted-foreground">+23 esta semana</p>
+              <div className="text-2xl font-bold">{loading ? '...' : stats.totalRecipes}</div>
+              <p className="text-xs text-muted-foreground">Recetas totales</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Temas del Foro</CardTitle>
-              <MessageSquare className="h-4 w-4 text-primary" />
+              <CardTitle className="text-sm font-medium">Recetas Reportadas</CardTitle>
+              <AlertTriangle className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">89</div>
-              <p className="text-xs text-muted-foreground">32 activos hoy</p>
+              <div className="text-2xl font-bold">{loading ? '...' : stats.reportedComments?.length || 0}</div>
+              <p className="text-xs text-muted-foreground">Recetas que requieren moderación</p>
             </CardContent>
           </Card>
 
@@ -78,65 +106,13 @@ const AdminDashboard = () => {
               <TrendingUp className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">12.5K</div>
-              <p className="text-xs text-muted-foreground">+18% vs mes anterior</p>
+              <div className="text-2xl font-bold">{loading ? '...' : stats.totalVisits}</div>
+              <p className="text-xs text-muted-foreground">Visitas este mes</p>
             </CardContent>
           </Card>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2">
-          <Card>
-            <CardHeader>
-              <CardTitle>Recetas Recientes</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <p className="text-muted-foreground text-sm">
-                  Lista de las últimas recetas publicadas y pendientes de moderación
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Usuarios Activos</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <p className="text-muted-foreground text-sm">
-                  Usuarios que han interactuado recientemente en la plataforma
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Comentarios Reportados</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <p className="text-muted-foreground text-sm">
-                  Comentarios que requieren moderación
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Estadísticas de Contenido</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <p className="text-muted-foreground text-sm">
-                  Análisis detallado del contenido de la plataforma
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        {/* Puedes seguir con las demás tarjetas usando stats.recentRecipes, stats.activeUsers, etc. */}
       </main>
       <Footer />
     </div>
