@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import RecipeCard from "@/components/RecipeCard";
@@ -11,9 +12,7 @@ import supabase from "@/lib/supabaseClient";
 
 const Recipes = () => {
   const [searchAuthor, setSearchAuthor] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [selectedDifficulty, setSelectedDifficulty] = useState<string>("all");
-
+  const location = useLocation();
   const categories = [
     "Desayuno",
     "Almuerzo",
@@ -22,6 +21,23 @@ const Recipes = () => {
     "Vegetariano",
     "Vegano",
   ];
+  // Inicializa la categoría desde la URL si existe
+  const params = new URLSearchParams(location.search);
+  const categoryParam = params.get("category");
+  const initialCategory = categoryParam && categories.includes(categoryParam) ? categoryParam : "all";
+  const [selectedCategory, setSelectedCategory] = useState<string>(initialCategory);
+  const [selectedDifficulty, setSelectedDifficulty] = useState<string>("all");
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const categoryParam = params.get("category");
+    if (categoryParam && categories.includes(categoryParam)) {
+      setSelectedCategory(categoryParam);
+    }
+    if (!categoryParam) {
+      setSelectedCategory("all");
+    }
+  }, [location.search]);
 
   const [recipes, setRecipes] = useState<any[]>([]);
   useEffect(() => {

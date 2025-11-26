@@ -32,14 +32,12 @@ const Home = () => {
   }, []);
 
   const categories = [
-    { name: "Italiana", icon: Pizza, variant: "primary" as const },
-    { name: "Mariscos", icon: Fish, variant: "accent" as const },
-    { name: "Vegetariana", icon: Leaf, variant: "primary" as const },
+    { name: "Desayuno", icon: Coffee, variant: "primary" as const },
+    { name: "Almuerzo", icon: UtensilsCrossed, variant: "accent" as const },
+    { name: "Cena", icon: UtensilsCrossed, variant: "primary" as const },
     { name: "Postres", icon: Cake, variant: "accent" as const },
-    { name: "Saludable", icon: Apple, variant: "primary" as const },
-    { name: "Desayunos", icon: Coffee, variant: "accent" as const },
-    { name: "Mexicana", icon: UtensilsCrossed, variant: "primary" as const },
-    { name: "Global", icon: Globe, variant: "accent" as const },
+    { name: "Vegetariano", icon: Leaf, variant: "primary" as const },
+    { name: "Vegano", icon: Apple, variant: "accent" as const },
   ];
 
   return (
@@ -106,12 +104,13 @@ const Home = () => {
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
             {categories.map((category, index) => (
-              <CategoryCard
-                key={index}
-                name={category.name}
-                icon={category.icon}
-                variant={category.variant}
-              />
+              <Link to={`/recipes?category=${encodeURIComponent(category.name)}`} key={index}>
+                <CategoryCard
+                  name={category.name}
+                  icon={category.icon}
+                  variant={category.variant}
+                />
+              </Link>
             ))}
           </div>
         </div>
