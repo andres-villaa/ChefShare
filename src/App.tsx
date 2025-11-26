@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Recipes from "./pages/Recipes";
 import RecipeDetail from "./pages/RecipeDetail";
+import CreateRecipe from "./pages/CreateRecipe";
 import Forum from "./pages/Forum";
 import Profile from "./pages/Profile";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -28,6 +29,7 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/recipes" element={<Recipes />} />
+            <Route path="/recipes/new" element={<CreateRecipe />} />
             <Route path="/recipe/:id" element={<RecipeDetail />} />
             <Route path="/forum" element={<Forum />} />
             <Route path="/profile" element={<Profile />} />

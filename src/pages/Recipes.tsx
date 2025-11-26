@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import RecipeCard from "@/components/RecipeCard";
@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Badge } from "@/components/ui/badge";
 import { Search } from "lucide-react";
+import supabase from "@/lib/supabaseClient";
 
 const Recipes = () => {
   const [searchAuthor, setSearchAuthor] = useState("");
@@ -22,88 +23,24 @@ const Recipes = () => {
     "Vegano",
   ];
 
-  const recipes = [
-    {
-      id: 1,
-      title: "Paella Valenciana",
-      author: "Chef Miguel",
-      rating: 4.8,
-      image: "https://images.unsplash.com/photo-1534080564583-6be75777b70a?w=800&q=80",
-      time: 60,
-      difficulty: "Avanzado",
-      category: "Almuerzo",
-    },
-    {
-      id: 2,
-      title: "Ensalada Fresca de Quinoa",
-      author: "Ana Cocina",
-      rating: 4.5,
-      image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&q=80",
-      time: 20,
-      difficulty: "Fácil",
-      category: "Vegetariano",
-    },
-    {
-      id: 3,
-      title: "Curry de Garbanzos y Espinacas",
-      author: "Sabores de Sofia",
-      rating: 4.7,
-      image: "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=800&q=80",
-      time: 45,
-      difficulty: "Moderado",
-      category: "Vegano",
-    },
-    {
-      id: 4,
-      title: "Tarta de Manzana Casera",
-      author: "Recetas de Pedro",
-      rating: 4.9,
-      image: "https://images.unsplash.com/photo-1535920527002-b35e96722eb9?w=800&q=80",
-      time: 90,
-      difficulty: "Moderado",
-      category: "Postres",
-    },
-    {
-      id: 5,
-      title: "Smoothie Tropical Antioxidante",
-      author: "Ana Cocina",
-      rating: 4.6,
-      image: "https://images.unsplash.com/photo-1505252585461-04db1eb84625?w=800&q=80",
-      time: 10,
-      difficulty: "Fácil",
-      category: "Desayuno",
-    },
-    {
-      id: 6,
-      title: "Lasaña Clásica a la Boloñesa",
-      author: "Chef Miguel",
-      rating: 4.9,
-      image: "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=800&q=80",
-      time: 120,
-      difficulty: "Avanzado",
-      category: "Cena",
-    },
-    {
-      id: 7,
-      title: "Pan Integral Casero",
-      author: "Recetas de Pedro",
-      rating: 4.7,
-      image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800&q=80",
-      time: 180,
-      difficulty: "Moderado",
-      category: "Desayuno",
-    },
-    {
-      id: 8,
-      title: "Sopa de Verduras de la Abuela",
-      author: "Recetas de Pedro",
-      rating: 4.4,
-      image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=800&q=80",
-      time: 40,
-      difficulty: "Fácil",
-      category: "Cena",
-    },
-  ];
+  const [recipes, setRecipes] = useState<any[]>([]);
+  useEffect(() => {
+    let mounted = true;
+    async function fetchRecipes() {
+      const { data, error } = await supabase
+        .from('recipes')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (!mounted) return;
+      if (error) {
+        setRecipes([]);
+      } else {
+        setRecipes(data || []);
+      }
+    }
+    fetchRecipes();
+    return () => { mounted = false; };
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -199,7 +136,17 @@ const Recipes = () => {
           <div className="lg:col-span-3">
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
               {recipes.map((recipe) => (
-                <RecipeCard key={recipe.id} {...recipe} />
+                <RecipeCard
+                  key={recipe.id}
+                  id={recipe.id}
+                  title={recipe.title}
+                  author={recipe.author_name || recipe.author}
+                  rating={recipe.rating}
+                  image={recipe.image_url}
+                  time={recipe.time}
+                  difficulty={recipe.difficulty}
+                  category={recipe.category}
+                />
               ))}
             </div>
           </div>

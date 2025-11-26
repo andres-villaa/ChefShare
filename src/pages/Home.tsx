@@ -6,52 +6,30 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import heroImage from "@/assets/hero-kitchen.jpg";
 import { Pizza, Fish, Leaf, Cake, Apple, Coffee, UtensilsCrossed, Globe } from "lucide-react";
+import { useState, useEffect } from "react";
+import supabase from "@/lib/supabaseClient";
 
 const Home = () => {
-  const featuredRecipes = [
-    {
-      id: 1,
-      title: "Lasaña Clásica",
-      author: "Chef Ana",
-      rating: 4.5,
-      image: "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=800&q=80",
-    },
-    {
-      id: 2,
-      title: "Tacos de Pescado",
-      author: "Gourmet Max",
-      rating: 4.8,
-      image: "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?w=800&q=80",
-    },
-    {
-      id: 3,
-      title: "Sopa de Lentejas",
-      author: "Cocina Fácil",
-      rating: 4.2,
-      image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=800&q=80",
-    },
-    {
-      id: 4,
-      title: "Curry de Pollo",
-      author: "Sabor del Mundo",
-      rating: 4.7,
-      image: "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=800&q=80",
-    },
-    {
-      id: 5,
-      title: "Ensalada Quinoa",
-      author: "Vida Sana",
-      rating: 4.0,
-      image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&q=80",
-    },
-    {
-      id: 6,
-      title: "Pastel de Chocolate",
-      author: "Postres Divinos",
-      rating: 4.9,
-      image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&q=80",
-    },
-  ];
+  const [featuredRecipes, setFeaturedRecipes] = useState<any[]>([]);
+
+  useEffect(() => {
+    let mounted = true;
+    async function fetchRecipes() {
+      const { data, error } = await supabase
+        .from('recipes')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(6);
+      if (!mounted) return;
+      if (error) {
+        setFeaturedRecipes([]);
+      } else {
+        setFeaturedRecipes(data || []);
+      }
+    }
+    fetchRecipes();
+    return () => { mounted = false; };
+  }, []);
 
   const categories = [
     { name: "Italiana", icon: Pizza, variant: "primary" as const },
@@ -105,7 +83,14 @@ const Home = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {featuredRecipes.map((recipe) => (
-            <RecipeCard key={recipe.id} {...recipe} />
+            <RecipeCard
+              key={recipe.id}
+              id={recipe.id}
+              title={recipe.title}
+              author={recipe.author_name || recipe.author}
+              rating={recipe.rating}
+              image={recipe.image_url}
+            />
           ))}
         </div>
       </section>

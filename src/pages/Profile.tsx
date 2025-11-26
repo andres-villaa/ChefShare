@@ -7,9 +7,38 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Heart, BookMarked, MessageSquare, Settings } from "lucide-react";
+import { useState, useEffect } from "react";
+import supabase from "@/lib/supabaseClient";
+import RecipeCard from "@/components/RecipeCard";
 
 const Profile = () => {
   const { user } = useAuth();
+  const [savedRecipes, setSavedRecipes] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (!user?.id) return;
+    let mounted = true;
+    async function fetchSaved() {
+      const { data, error } = await supabase
+        .from('saved_recipes')
+        .select('recipe_id')
+        .eq('user_id', user.id);
+      if (!mounted) return;
+      if (error || !data?.length) {
+        setSavedRecipes([]);
+        return;
+      }
+      const ids = data.map((r: any) => r.recipe_id);
+      if (!ids.length) { setSavedRecipes([]); return; }
+      const { data: recipesData } = await supabase
+        .from('recipes')
+        .select('*')
+        .in('id', ids);
+      setSavedRecipes(recipesData || []);
+    }
+    fetchSaved();
+    return () => { mounted = false; };
+  }, [user]);
 
   if (!user) {
     return (
@@ -96,14 +125,29 @@ const Profile = () => {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Heart className="h-5 w-5" />
-                    Recetas Favoritas
+                    <BookMarked className="h-5 w-5" />
+                    Recetas Guardadas
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground text-center py-8">
-                    No tienes recetas guardadas en favoritos
-                  </p>
+                  {savedRecipes.length === 0 ? (
+                    <p className="text-muted-foreground text-center py-8">
+                      No tienes recetas guardadas
+                    </p>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {savedRecipes.map((recipe) => (
+                        <RecipeCard
+                          key={recipe.id}
+                          id={recipe.id}
+                          title={recipe.title}
+                          author={recipe.author_name || recipe.author}
+                          rating={recipe.rating}
+                          image={recipe.image_url}
+                        />
+                      ))}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>
@@ -127,7 +171,7 @@ const Profile = () => {
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
-                      <BookMarked className="h-5 w-5" />
+                      <Heart className="h-5 w-5" />
                       Recetas que te gustaron
                     </CardTitle>
                   </CardHeader>
