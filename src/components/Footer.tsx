@@ -9,7 +9,7 @@ const Footer = () => {
           <div className="md:col-span-4 space-y-4">
             <div className="flex items-center gap-2">
               <ChefHat className="h-6 w-6 text-primary" />
-              <span className="text-lg font-bold text-foreground">KitchenLink</span>
+              <span className="text-lg font-bold text-foreground">ChefShare</span>
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">
               Conectando amantes de la cocina, una receta a la vez. Comparte tu pasión, descubre nuevos sabores.
@@ -77,7 +77,7 @@ const Footer = () => {
 
         <div className="mt-8 pt-8 border-t border-border">
           <p className="text-center text-sm text-muted-foreground">
-            ©2025 KitchenLink. Todos los derechos reservados
+            © 2025 ChefShare. Todos los derechos reservados.
           </p>
         </div>
       </div>

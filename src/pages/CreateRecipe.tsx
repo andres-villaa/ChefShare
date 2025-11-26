@@ -21,6 +21,14 @@ const CreateRecipe = () => {
   const [steps, setSteps] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [category, setCategory] = useState('');
+  const categories = [
+    "Desayuno",
+    "Almuerzo",
+    "Cena",
+    "Postres",
+    "Vegetariano",
+    "Vegano"
+  ];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -84,7 +92,22 @@ const CreateRecipe = () => {
           </div>
           <div>
             <Label htmlFor="category">Categoría</Label>
-            <Input id="category" value={category} onChange={(e) => setCategory(e.target.value)} />
+            <div className="flex gap-6 py-2">
+              {categories.map(cat => (
+                <label key={cat} className="flex flex-col items-center cursor-pointer">
+                  <input
+                    type="radio"
+                    name="category"
+                    value={cat}
+                    checked={category === cat}
+                    onChange={() => setCategory(cat)}
+                    className="appearance-none w-5 h-5 border-2 border-orange-500 rounded-full checked:bg-orange-500 checked:border-orange-500 focus:outline-none mb-1"
+                    required
+                  />
+                  <span className="text-base font-semibold text-foreground">{cat}</span>
+                </label>
+              ))}
+            </div>
           </div>
           <div>
             <Button type="submit">Publicar receta</Button>

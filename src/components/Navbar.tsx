@@ -24,7 +24,7 @@ const Navbar = () => {
         <div className="flex h-16 items-center justify-between">
           <Link to="/" className="flex items-center gap-2 text-xl font-bold text-foreground hover:text-primary transition-colors">
             <ChefHat className="h-7 w-7 text-primary" />
-            <span>KitchenLink</span>
+            <span>ChefShare</span>
           </Link>
 
           <div className="hidden md:flex items-center gap-6">

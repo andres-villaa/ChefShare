@@ -23,7 +23,7 @@ const Login = () => {
     if (result.success) {
       toast({
         title: "Inicio de sesión exitoso",
-        description: "Bienvenido de vuelta a KitchenLink",
+        description: "Bienvenido de vuelta a ChefShare",
       });
       navigate("/");
     } else {

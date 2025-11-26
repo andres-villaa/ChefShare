@@ -62,11 +62,11 @@ const Home = () => {
                 Explorar recetas
               </Button>
             </Link>
-            <Link to="/register">
-              <Button size="lg" variant="secondary" className="text-base px-8">
-                Publica la tuya
-              </Button>
-            </Link>
+              <Link to="/recipes/new">
+                <Button size="lg" variant="secondary" className="text-base px-8">
+                  Publica la tuya
+                </Button>
+              </Link>
           </div>
         </div>
       </section>

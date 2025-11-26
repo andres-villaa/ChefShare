@@ -14,29 +14,41 @@ import RecipeCard from "@/components/RecipeCard";
 const Profile = () => {
   const { user } = useAuth();
   const [savedRecipes, setSavedRecipes] = useState<any[]>([]);
+  const [myRecipes, setMyRecipes] = useState<any[]>([]);
 
   useEffect(() => {
     if (!user?.id) return;
     let mounted = true;
-    async function fetchSaved() {
-      const { data, error } = await supabase
+    async function fetchSavedAndMine() {
+      // Fetch saved recipes
+      const { data: savedData, error: savedError } = await supabase
         .from('saved_recipes')
         .select('recipe_id')
         .eq('user_id', user.id);
       if (!mounted) return;
-      if (error || !data?.length) {
+      if (savedError || !savedData?.length) {
         setSavedRecipes([]);
-        return;
+      } else {
+        const ids = savedData.map((r: any) => r.recipe_id);
+        if (!ids.length) { setSavedRecipes([]); }
+        else {
+          const { data: recipesData } = await supabase
+            .from('recipes')
+            .select('*')
+            .in('id', ids);
+          setSavedRecipes(recipesData || []);
+        }
       }
-      const ids = data.map((r: any) => r.recipe_id);
-      if (!ids.length) { setSavedRecipes([]); return; }
-      const { data: recipesData } = await supabase
+      // Fetch user's own recipes
+      const { data: myData, error: myError } = await supabase
         .from('recipes')
         .select('*')
-        .in('id', ids);
-      setSavedRecipes(recipesData || []);
+        .eq('author_id', user.id)
+        .order('created_at', { ascending: false });
+      if (!mounted) return;
+      setMyRecipes(myError ? [] : (myData || []));
     }
-    fetchSaved();
+    fetchSavedAndMine();
     return () => { mounted = false; };
   }, [user]);
 
@@ -114,9 +126,24 @@ const Profile = () => {
                   <CardTitle>Mis Recetas Publicadas</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground text-center py-8">
-                    Aún no has publicado ninguna receta
-                  </p>
+                  {myRecipes.length === 0 ? (
+                    <p className="text-muted-foreground text-center py-8">
+                      Aún no has publicado ninguna receta
+                    </p>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {myRecipes.map((recipe) => (
+                        <RecipeCard
+                          key={recipe.id}
+                          id={recipe.id}
+                          title={recipe.title}
+                          author={recipe.author_name || recipe.author}
+                          rating={recipe.rating}
+                          image={recipe.image_url}
+                        />
+                      ))}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>

@@ -34,7 +34,7 @@ const AdminDashboard = () => {
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Panel de Administración</h1>
           <p className="text-muted-foreground">
-            Gestiona el contenido y usuarios de KitchenLink
+            Gestiona el contenido y usuarios de ChefShare
           </p>
         </div>
 

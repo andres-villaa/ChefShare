@@ -35,7 +35,7 @@ const Register = () => {
     if (result.success) {
       toast({
         title: "Cuenta creada exitosamente",
-        description: "Bienvenido a KitchenLink",
+        description: "Bienvenido a ChefShare",
       });
       navigate("/");
     } else {
@@ -56,7 +56,7 @@ const Register = () => {
         <div className="bg-[#F5EFE7] p-8 md:p-12 flex flex-col justify-center">
           <div className="space-y-6">
             <div className="text-center">
-              <h1 className="text-3xl font-bold text-foreground mb-2">Registrarse</h1>
+              <h1 className="text-3xl font-bold text-foreground mb-2">Regístrate en ChefShare</h1>
             </div>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
